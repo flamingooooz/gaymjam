@@ -1,38 +1,79 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Jano")]
     public float thirst = 100f;
+    public float maxThirst = 100f;
+    public Scrollbar scrollbar;
+
+    [Header("Sanity")]
     public float sanity = 100f;
-    public float sanityDecrease = 1f;
-    public float sanityIncrease = 1f;
     public float minValue = 0f;
+    public float sanityIncrease = 1f;       // maksimi palautumisnopeus
+    public float thirstOkLimit = 60f;       // sanity palautuu
+    public float lowSanityLimit = 50f;      // effektit
+
+    [Header("Sanityn laskunopeudet (jano alle rajan)")]
+    public float thirstLimit2 = 40f;
+    public float thirstLimit3 = 25f;
+    public float drainMild = 0.2f;            // jano < 60
+    public float drainMedium = 1f;          // jano < 40
+    public float drainHigh = 2f;            // jano < 25
+    public float drainCritical = 4f;       // jano = 0
+
+    [Header("Ajastin")]
     public float time = 300f;
     public GameObject lowtime;
     public float displayDuration = 3f;
     public GameObject winMenu;
-    public Scrollbar scrollbar;
 
+    [Header("Sanity-efektit")]
+    public AudioSource heartbeatSource;    
+    public Transform cameraTransform;
+    public float maxShake = 0.03f;
+
+    [Header("Hallusinaatiot")]
+    public AudioSource whisperSource;
+    public AudioClip[] whisperClips;
+    public GameObject[] hallucinationObjects;
+    public float hallucinationMinInterval = 5f;
+    public float hallucinationMaxInterval = 15f;
+    public float hallucinationDuration = 1.5f;
+
+    private float sanityDecrease;
     private bool hasWarnedLowTime = false;
+    private bool hasEnded = false;
+    private float hallucinationTimer;
+    private Vector3 camStartLocalPos;
 
     void Start()
     {
         lowtime.SetActive(false);
+        ResetHallucinationTimer();
+
+        if (cameraTransform != null)
+            camStartLocalPos = cameraTransform.localPosition;
+
+        foreach (var obj in hallucinationObjects)
+            if (obj != null) obj.SetActive(false);
     }
 
-    public void Update()
+    void Update()
     {
+        if (hasEnded) return;
 
-        scrollbar.value = thirst / 100f;
+        scrollbar.value = thirst / maxThirst;
 
         thirst = Mathf.Max(0f, thirst - Time.deltaTime);
-        time -= Time.deltaTime;
+        time = Mathf.Max(0f, time - Time.deltaTime);
 
-
-        if (time <= 0.0f)
+        if (time <= 0f)
         {
             timerEnded();
+            return;
         }
 
         if (time < 120f && !hasWarnedLowTime)
@@ -41,56 +82,133 @@ public class GameManager : MonoBehaviour
             timerLow();
         }
 
-     
-        if (thirst <= 0f)
+        UpdateSanity();
+        UpdateSanityEffects();
+    }
+
+    void LateUpdate()
+    {
+   
+        if (cameraTransform == null || hasEnded) return;
+
+        float intensity = GetSanityIntensity();
+        if (intensity > 0f)
+            cameraTransform.localPosition = camStartLocalPos + Random.insideUnitSphere * maxShake * intensity;
+        else
+            cameraTransform.localPosition = camStartLocalPos;
+    }
+
+
+
+    void UpdateSanity()
+    {
+        if (thirst > thirstOkLimit)
         {
-            SetSanityDrainRate(15f);
-        }
-        else if (thirst < 25f)
-        {
-            SetSanityDrainRate(6f);
-        }
-        else if (thirst < 40f)
-        {
-            SetSanityDrainRate(4f);
-        }
-        else if (thirst < 60f)
-        {
-            SetSanityDrainRate(2f);
+      
+            float t = Mathf.InverseLerp(thirstOkLimit, maxThirst, thirst);
+            float regen = sanityIncrease * Mathf.Lerp(0.25f, 1f, t);
+            sanity = Mathf.MoveTowards(sanity, 100f, regen * Time.deltaTime);
         }
         else
         {
-            SetSanityDrainRate(0f); 
-        }
-
-
-        if (sanityDecrease > 0f && sanity > minValue)
-        {
+            sanityDecrease = GetDrainRate();
             sanity = Mathf.MoveTowards(sanity, minValue, sanityDecrease * Time.deltaTime);
         }
+    }
 
-        // Sanity events
-        if (sanity < 50f)
+    float GetDrainRate()
+    {
+        if (thirst <= 0f) return drainCritical;
+        if (thirst < thirstLimit3) return drainHigh;
+        if (thirst < thirstLimit2) return drainMedium;
+        return drainMild; 
+    }
+
+
+    float GetSanityIntensity()
+    {
+        return Mathf.Clamp01(1f - sanity / lowSanityLimit);
+    }
+
+    void UpdateSanityEffects()
+    {
+        float intensity = GetSanityIntensity();
+
+
+
+        // Sydämenlyönnit
+        if (heartbeatSource != null)
         {
-            lowSanity1();
+            if (intensity > 0f)
+            {
+                if (!heartbeatSource.isPlaying) heartbeatSource.Play();
+                heartbeatSource.volume = intensity;
+                heartbeatSource.pitch = 1f + intensity * 0.5f;
+            }
+            else if (heartbeatSource.isPlaying)
+            {
+                heartbeatSource.Stop();
+            }
+        }
+
+        // Hallusinaatiot
+        if (sanity < lowSanityLimit)
+            lowSanity1(intensity);
+        else
+            ResetHallucinationTimer();
+    }
+
+    //Hallusinaatiot
+
+    void lowSanity1(float intensity)
+    {
+        hallucinationTimer -= Time.deltaTime;
+        if (hallucinationTimer > 0f) return;
+
+        TriggerHallucination();
+
+        hallucinationTimer = Random.Range(hallucinationMinInterval, hallucinationMaxInterval)
+                             * Mathf.Lerp(1f, 0.4f, intensity);
+    }
+
+    void TriggerHallucination()
+    {
+        if (whisperSource != null && whisperClips.Length > 0)
+        {
+            whisperSource.PlayOneShot(whisperClips[Random.Range(0, whisperClips.Length)]);
+        }
+
+        if (hallucinationObjects.Length > 0)
+        {
+            GameObject obj = hallucinationObjects[Random.Range(0, hallucinationObjects.Length)];
+            if (obj != null) StartCoroutine(ShowHallucination(obj));
         }
     }
 
-    // Thirst actions
-    void SetSanityDrainRate(float rate)
+    IEnumerator ShowHallucination(GameObject obj)
     {
-        sanityDecrease = rate;
+        obj.SetActive(true);
+        yield return new WaitForSeconds(hallucinationDuration);
+        obj.SetActive(false);
     }
 
-    // Sanity actions
-    void lowSanity1()
+    void ResetHallucinationTimer()
     {
-        // Hallucinate
+        hallucinationTimer = Random.Range(hallucinationMinInterval, hallucinationMaxInterval);
     }
 
-    // Timer actions
+    // jano
+
+    public void Drink(float amount)
+    {
+        thirst = Mathf.Min(maxThirst, thirst + amount);
+    }
+
+    // ajastin
+
     void timerEnded()
     {
+        hasEnded = true;
         winMenu.SetActive(true);
     }
 
