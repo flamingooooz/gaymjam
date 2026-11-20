@@ -41,8 +41,17 @@ public class Winorlosestate : MonoBehaviour
     }
     public void NextLevel()
     {
-        
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex; 
+        int nextSceneIndex = currentSceneIndex + 1;
+        if (nextSceneIndex >= SceneManager.sceneCountInBuildSettings)
+        {
+            Debug.Log("WINNER");
+        }
+        else
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+           
     }
     public void RestartLevel()
     {
