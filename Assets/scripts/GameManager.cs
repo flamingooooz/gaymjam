@@ -63,6 +63,7 @@ public class GameManager : MonoBehaviour
     [Header("muu UI")]
     public GameObject drinkHint;
     public TextMeshProUGUI timer;
+    public TextMeshProUGUI waterPercentage;
 
     public static GameManager instance;
     private void Awake()
@@ -117,7 +118,9 @@ public class GameManager : MonoBehaviour
         int seconds = Mathf.FloorToInt(time - (minutes * 60));
         float milliseconds = (time - (seconds + (minutes * 60))) * 1000f;
         string timeStyle = string.Format("{0:0}:{1:00}:{2:000}", minutes, seconds, milliseconds);
-        timer.text = timeStyle;
+        timer.text = "Time remaining: " + timeStyle;
+
+        waterPercentage.text = Mathf.RoundToInt(thirst) + "%";
     }
 
     void LateUpdate()
