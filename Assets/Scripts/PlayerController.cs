@@ -40,29 +40,21 @@ public class PlayerController : MonoBehaviour
         //Pausing
         if (pause.action.WasPressedThisFrame() && isPaused == false)
         {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
             isPaused = true;
             Debug.Log("pause");
             GameManager.instance.pause();
-            PauseGame();
+            Time.timeScale = 0;
         }
         else if (pause.action.WasPressedThisFrame() && isPaused == true)
         {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
             Time.timeScale = 1;
             isPaused = false;
             Debug.Log("not pause");
             GameManager.instance.pause();
-
-        }
-        void PauseGame()
-        {
-            if (isPaused)
-            {
-                Time.timeScale = 0f;
-            }
-            else
-            {
-                Time.timeScale = 1;
-            }
         }
     }
     private void OnDisable()
