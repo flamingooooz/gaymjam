@@ -36,7 +36,7 @@ public class Winorlosestate : MonoBehaviour
     {
         if (show == true)
         {
-            lose.SetActive(show);
+            gameWin.SetActive(show);
         }
     }
     public void NextLevel()
@@ -57,5 +57,13 @@ public class Winorlosestate : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         Debug.Log("REload");
+    }
+    public void LoadMenu()
+    {
+        SceneManager.LoadScene("Main Menu");
+    }
+    public void FirstLevel()
+    {
+        SceneManager.LoadScene("forest");
     }
 }
