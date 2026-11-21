@@ -59,6 +59,12 @@ public class GameManager : MonoBehaviour
     private float hallucinationTimer;
     private Vector3 camStartLocalPos;
 
+    public static GameManager instance;
+    private void Awake()
+    {
+        instance = this;
+    }
+
     void Start()
     {
         if (thirstWarning60 != null) thirstWarning60.SetActive(false);

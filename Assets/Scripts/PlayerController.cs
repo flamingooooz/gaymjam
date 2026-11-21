@@ -71,13 +71,13 @@ public class PlayerController : MonoBehaviour
         Vector2 moveInput = move.action.ReadValue<Vector2>();
         Vector3 moveDirection = transform.right * moveInput.x + transform.forward * moveInput.y;
 
-        Vector3 targetVelocity = moveDirection * speed;
+        Vector3 targetVelocity = moveDirection * speed * (GameManager.instance.thirst / 100);
         rb.linearVelocity = new Vector3(targetVelocity.x, rb.linearVelocity.y, targetVelocity.z);
 
         //jump
         if (jump.action.IsPressed() && isGrounded)
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            rb.AddForce(Vector3.up * jumpForce * (GameManager.instance.thirst / 100), ForceMode.Impulse);
         }
         //dash
         if (run.action.IsPressed() && !isGrounded && cooldownTimer >= dashCooldownTime)
