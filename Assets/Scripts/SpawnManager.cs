@@ -3,6 +3,7 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     public GameObject bottle;
+    public GameObject waterParticle;
     private GameObject activeBottle;
     private float radius = 50f;
 
@@ -19,7 +20,7 @@ public class SpawnManager : MonoBehaviour
 
     public void RespawnBottle()
     {
-
+        Instantiate(waterParticle, activeBottle.transform.position, Quaternion.identity);
         activeBottle.transform.position = SelectSpawn();
     }
 
