@@ -71,6 +71,7 @@ public class GameManager : MonoBehaviour
     public GameObject drinkHint;
     public TextMeshProUGUI timer;
     public TextMeshProUGUI waterPercentage;
+    public TextMeshProUGUI sanityPercentage;
 
     public static GameManager instance;
     private void Awake()
@@ -135,6 +136,7 @@ public class GameManager : MonoBehaviour
         timer.text = "Time remaining: " + timeStyle;
 
         waterPercentage.text = Mathf.RoundToInt(thirst) + "%";
+        sanityPercentage.text = Mathf.RoundToInt(sanity) + "%";
 
         if (sanity < lowSanityLimit)
         {
