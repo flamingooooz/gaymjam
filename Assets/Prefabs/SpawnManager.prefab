@@ -44,3 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 124779026e472fa488aef27ce7656036, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  bottle: {fileID: 0}
+  waterParticle: {fileID: 4013450446364590023, guid: 61adb11fa240ffb46842f8dc445cb404, type: 3}
