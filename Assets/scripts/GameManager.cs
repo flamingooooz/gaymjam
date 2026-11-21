@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class GameManager : MonoBehaviour
     public float sanityIncrease = 1f;       // maksimi palautumisnopeus
     public float thirstOkLimit = 60f;       // sanity palautuu
     public float lowSanityLimit = 50f;      // effektit
+    public Image sanityImage;
 
     [Header("Sanityn laskunopeudet (jano alle rajan)")]
     public float thirstLimit2 = 40f;
@@ -33,6 +35,8 @@ public class GameManager : MonoBehaviour
     public float time = 300f;
     public float displayDuration = 3f;
     public GameObject winMenu;
+    public GameObject deathMenu;
+    public GameObject pauseMenu;
 
     [Header("Sanity-efektit")]
     public AudioSource heartbeatSource;
@@ -67,6 +71,7 @@ public class GameManager : MonoBehaviour
     public GameObject drinkHint;
     public TextMeshProUGUI timer;
     public TextMeshProUGUI waterPercentage;
+    public TextMeshProUGUI sanityPercentage;
 
     public static GameManager instance;
     private void Awake()
@@ -76,6 +81,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        Time.timeScale = 1;
         if (thirstWarning60 != null) thirstWarning60.SetActive(false);
         if (thirstWarning25 != null) thirstWarning25.SetActive(false);
         if (lowSanityWarning != null) lowSanityWarning.SetActive(false);
@@ -100,6 +106,7 @@ public class GameManager : MonoBehaviour
     {
         if (hasEnded) return;
 
+        sanityImage.fillAmount = sanity / maxSanity;
         thirstImage.fillAmount = thirst / maxThirst;
         thirstImage.color = Color.Lerp(Color.blue, Color.white, thirst / maxThirst);
 
@@ -129,6 +136,7 @@ public class GameManager : MonoBehaviour
         timer.text = "Time remaining: " + timeStyle;
 
         waterPercentage.text = Mathf.RoundToInt(thirst) + "%";
+        sanityPercentage.text = Mathf.RoundToInt(sanity) + "%";
 
         if (sanity < lowSanityLimit)
         {
@@ -136,6 +144,10 @@ public class GameManager : MonoBehaviour
             {
                 StartCoroutine(HallucinationEffect());
             }
+        }
+        if (thirst <= 0f)
+        {
+            death();
         }
     }
 
@@ -330,5 +342,30 @@ public class GameManager : MonoBehaviour
     void Hide()
     {
         lowtime.SetActive(false);
+    }
+   
+    public void pause()
+    {
+        if (pauseMenu.activeSelf == true)
+        {
+            pauseMenu.SetActive(false);
+        }
+        else 
+        {
+            pauseMenu.SetActive(true);
+        }
+    }
+    public void death()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        Time.timeScale = 0;
+        deathMenu.SetActive(true);
+        
+    }
+    public void Respawn()
+    {
+        
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

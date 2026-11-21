@@ -1,4 +1,3 @@
-using System.IO.Compression;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -21,6 +20,9 @@ public class PlayerController : MonoBehaviour
     public InputActionReference run;
     public InputActionReference crouch;
     public InputActionReference drink;
+    public InputActionReference pause;
+
+    public static bool isPaused = false;
 
     public Transform camera;
 
@@ -31,6 +33,29 @@ public class PlayerController : MonoBehaviour
         run.action.Enable();
         crouch.action.Enable();
         drink.action.Enable();
+        pause.action.Enable();
+    }
+    public void Update()
+    {
+        //Pausing
+        if (pause.action.WasPressedThisFrame() && isPaused == false)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            isPaused = true;
+            Debug.Log("pause");
+            GameManager.instance.pause();
+            Time.timeScale = 0;
+        }
+        else if (pause.action.WasPressedThisFrame() && isPaused == true)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            Time.timeScale = 1;
+            isPaused = false;
+            Debug.Log("not pause");
+            GameManager.instance.pause();
+        }
     }
     private void OnDisable()
     {
@@ -39,6 +64,7 @@ public class PlayerController : MonoBehaviour
         run.action.Disable();
         crouch.action.Disable();
         drink.action.Disable();
+        pause.action.Disable();
     }
 
     private void Start()
@@ -59,66 +85,69 @@ public class PlayerController : MonoBehaviour
         isGrounded = IsGrounded();
 
         cooldownTimer += Time.fixedDeltaTime;
-
+        
         //player rotation
         if (camera != null)
-        {
-            Vector3 forward = camera.forward;
-            forward.y = 0f;
-            if (forward.sqrMagnitude > 0.001f)
             {
-                transform.rotation = Quaternion.LookRotation(forward);
+                Vector3 forward = camera.forward;
+                forward.y = 0f;
+                if (forward.sqrMagnitude > 0.001f)
+                {
+                    transform.rotation = Quaternion.LookRotation(forward);
+                }
             }
-        }
+        
+
 
         //movement
         Vector2 moveInput = move.action.ReadValue<Vector2>();
-        Vector3 moveDirection = transform.right * moveInput.x + transform.forward * moveInput.y;
+            Vector3 moveDirection = transform.right * moveInput.x + transform.forward * moveInput.y;
 
-        Vector3 targetVelocity = moveDirection * speed * (Mathf.Sqrt(GameManager.instance.thirst) / 10);
-        rb.linearVelocity = new Vector3(targetVelocity.x, rb.linearVelocity.y, targetVelocity.z);
+            Vector3 targetVelocity = moveDirection * speed * (Mathf.Sqrt(GameManager.instance.thirst) / 10);
+            rb.linearVelocity = new Vector3(targetVelocity.x, rb.linearVelocity.y, targetVelocity.z);
 
-        //jump
-        if (jump.action.IsPressed() && isGrounded)
-        {
-            rb.AddForce(Vector3.up * jumpForce * (Mathf.Sqrt(GameManager.instance.thirst) / 10), ForceMode.Impulse);
-        }
-        //dash
-        if (run.action.IsPressed() && cooldownTimer >= dashCooldownTime)
-        {
-            speed = runSpeed;
-            Invoke("ResetTimer", 0.5f);
-        }
-        else {
-            speed = walkSpeed;
-        }
-        
-        if (crouch.action.IsPressed())
-        {
-            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y / 3, transform.localScale.z);
-        }
-        else
-        {
-            transform.localScale = playerScale;
-        }
-        Debug.DrawRay(transform.position, transform.forward);
-        if (Physics.BoxCast(transform.position, transform.localScale, transform.forward, transform.rotation, reach, LayerMask.GetMask("bottle")))
-        {
-            GameManager.instance.drinkHint.SetActive(true);
-            if(drink.action.IsPressed())
+            //jump
+            if (jump.action.IsPressed() && isGrounded)
             {
-                GameManager.instance.Drink(15f);
-                SpawnManager.instance.RespawnBottle();
+                rb.AddForce(Vector3.up * jumpForce * (Mathf.Sqrt(GameManager.instance.thirst) / 10), ForceMode.Impulse);
+            }
+            //dash
+            if (run.action.IsPressed() && cooldownTimer >= dashCooldownTime)
+            {
+                speed = runSpeed;
+                Invoke("ResetTimer", 0.5f);
+            }
+            else {
+                speed = walkSpeed;
+            }
+
+            if (crouch.action.IsPressed())
+            {
+                transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y / 3, transform.localScale.z);
+            }
+            else
+            {
+                transform.localScale = playerScale;
+            }
+            Debug.DrawRay(transform.position, transform.forward);
+            if (Physics.BoxCast(transform.position, transform.localScale, transform.forward, transform.rotation, reach, LayerMask.GetMask("bottle")))
+            {
+                GameManager.instance.drinkHint.SetActive(true);
+                if (drink.action.IsPressed())
+                {
+                    GameManager.instance.Drink(15f);
+                    SpawnManager.instance.RespawnBottle();
+                }
+            }
+            else
+            {
+                GameManager.instance.drinkHint.SetActive(false);
             }
         }
-        else
-        {
-            GameManager.instance.drinkHint.SetActive(false);
-        }
-    }
 
-    private void ResetTimer()
-    {
-        cooldownTimer = 0f;
-    }
+        private void ResetTimer()
+        {
+            cooldownTimer = 0f;
+        } 
 }
+
