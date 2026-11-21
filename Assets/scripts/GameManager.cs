@@ -2,6 +2,9 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,6 +15,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Sanity")]
     public float sanity = 100f;
+    public float maxSanity = 100f;
     public float minValue = 0f;
     public float sanityIncrease = 1f;       // maksimi palautumisnopeus
     public float thirstOkLimit = 60f;       // sanity palautuu
@@ -33,9 +37,9 @@ public class GameManager : MonoBehaviour
     public GameObject pauseMenu;
 
     [Header("Sanity-efektit")]
-    public AudioSource heartbeatSource;    
-    public Transform cameraTransform;
-    public float maxShake = 0.03f;
+    public AudioSource heartbeatSource;
+    public VolumeProfile postProcessingVolume;
+    private LensDistortion distortion;
 
     [Header("Hallusinaatiot")]
     public AudioSource whisperSource;
@@ -60,7 +64,6 @@ public class GameManager : MonoBehaviour
     private bool hasWarnedLowTime = false;
     private bool hasEnded = false;
     private float hallucinationTimer;
-    private Vector3 camStartLocalPos;
 
     [Header("muu UI")]
     public GameObject drinkHint;
@@ -83,11 +86,16 @@ public class GameManager : MonoBehaviour
         lowtime.SetActive(false);
         ResetHallucinationTimer();
 
-        if (cameraTransform != null)
-            camStartLocalPos = cameraTransform.localPosition;
-
         foreach (var obj in hallucinationObjects)
             if (obj != null) obj.SetActive(false);
+
+        if (postProcessingVolume != null)
+        {
+            if (postProcessingVolume.TryGet(out distortion))
+            {
+                distortion.intensity.value = 0;
+            }
+        }
     }
 
     void Update()
@@ -123,21 +131,15 @@ public class GameManager : MonoBehaviour
         timer.text = "Time remaining: " + timeStyle;
 
         waterPercentage.text = Mathf.RoundToInt(thirst) + "%";
+
+        if (sanity < lowSanityLimit)
+        {
+            if (postProcessingVolume != null)
+            {
+                StartCoroutine(HallucinationEffect());
+            }
+        }
     }
-
-    void LateUpdate()
-    {
-   
-        if (cameraTransform == null || hasEnded) return;
-
-        float intensity = GetSanityIntensity();
-        if (intensity > 0f)
-            cameraTransform.localPosition = camStartLocalPos + Random.insideUnitSphere * maxShake * intensity;
-        else
-            cameraTransform.localPosition = camStartLocalPos;
-    }
-
-
 
     void UpdateSanity()
     {
@@ -221,8 +223,6 @@ public class GameManager : MonoBehaviour
     {
         float intensity = GetSanityIntensity();
 
-
-
         // Sydämenlyönnit
         if (heartbeatSource != null)
         {
@@ -253,13 +253,13 @@ public class GameManager : MonoBehaviour
         hallucinationTimer -= Time.deltaTime;
         if (hallucinationTimer > 0f) return;
 
-        TriggerHallucination();
+        TriggerHallucination(intensity);
 
         hallucinationTimer = Random.Range(hallucinationMinInterval, hallucinationMaxInterval)
                              * Mathf.Lerp(1f, 0.4f, intensity);
     }
 
-    void TriggerHallucination()
+    void TriggerHallucination(float intensity)
     {
         if (whisperSource != null && whisperClips.Length > 0)
         {
@@ -272,7 +272,30 @@ public class GameManager : MonoBehaviour
             if (obj != null) StartCoroutine(ShowHallucination(obj));
         }
     }
-
+    IEnumerator HallucinationEffect()
+    {
+        if (postProcessingVolume.TryGet(out distortion))
+        {
+            for (float f = 0f; f <= 1; f += Time.deltaTime)
+            {
+                distortion.intensity.value = Mathf.Lerp(0, -0.8f, f);
+                yield return null;
+            }
+            for (int i = 0; i < 5; i++)
+            {
+                for (float f = 0f; f <= 1; f += Time.deltaTime)
+                {
+                    distortion.intensity.value = Mathf.Lerp(-0.8f, 0.8f, f);
+                    yield return null;
+                }
+                for (float f = 0f; f <= 1; f += Time.deltaTime)
+                {
+                    distortion.intensity.value = Mathf.Lerp(0.8f, -0.8f, f);
+                    yield return null;
+                }
+            }
+        }
+    }
     IEnumerator ShowHallucination(GameObject obj)
     {
         obj.SetActive(true);
