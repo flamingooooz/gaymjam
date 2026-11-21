@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     public float sanityIncrease = 1f;       // maksimi palautumisnopeus
     public float thirstOkLimit = 60f;       // sanity palautuu
     public float lowSanityLimit = 50f;      // effektit
+    public Image sanityImage;
 
     [Header("Sanityn laskunopeudet (jano alle rajan)")]
     public float thirstLimit2 = 40f;
@@ -102,6 +103,7 @@ public class GameManager : MonoBehaviour
     {
         if (hasEnded) return;
 
+        sanityImage.fillAmount = sanity / maxSanity;
         thirstImage.fillAmount = thirst / maxThirst;
         thirstImage.color = Color.Lerp(Color.blue, Color.white, thirst / maxThirst);
 
