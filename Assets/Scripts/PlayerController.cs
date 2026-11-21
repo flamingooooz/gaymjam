@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
     public static bool isPaused = false;
 
     public Transform camera;
-
+    public ParticleSystem dashParticle;
     private void OnEnable()
     {
         move.action.Enable();
@@ -114,11 +114,13 @@ public class PlayerController : MonoBehaviour
             //dash
             if (run.action.IsPressed() && cooldownTimer >= dashCooldownTime)
             {
+                dashParticle.Play();
                 speed = runSpeed;
                 Invoke("ResetTimer", 0.5f);
             }
             else {
                 speed = walkSpeed;
+                dashParticle.Stop();
             }
 
             if (crouch.action.IsPressed())
