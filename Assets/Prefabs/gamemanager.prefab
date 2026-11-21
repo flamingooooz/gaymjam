@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6576081871240847078
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1848650984108905281}
+  - component: {fileID: 5264393983338238150}
+  m_Layer: 0
+  m_Name: gamemanager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1848650984108905281
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6576081871240847078}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 64.53948, y: 1.98977, z: 33.88269}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5264393983338238150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6576081871240847078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fdda811254fecf46a37bb7f8bc31b22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  thirst: 100
+  maxThirst: 100
+  thirstImage: {fileID: 0}
+  sanity: 100
+  maxSanity: 100
+  minValue: 0
+  sanityIncrease: 1
+  thirstOkLimit: 60
+  lowSanityLimit: 50
+  sanityImage: {fileID: 0}
+  thirstLimit2: 40
+  thirstLimit3: 25
+  drainMild: 0.2
+  drainMedium: 1
+  drainHigh: 2
+  drainCritical: 4
+  time: 300
+  displayDuration: 3
+  winMenu: {fileID: 0}
+  deathMenu: {fileID: 0}
+  pauseMenu: {fileID: 0}
+  heartbeatSource: {fileID: 0}
+  postProcessingVolume: {fileID: 11400000, guid: 7d788c3cfac26ae45aa18b6204ccb4f3, type: 2}
+  whisperSource: {fileID: 0}
+  whisperClips:
+  - {fileID: 8300000, guid: 63ecb04988bcd05498f76c3cdca6154b, type: 3}
+  - {fileID: 8300000, guid: 1fdd8d17153c25c48935a987ecbac7fc, type: 3}
+  - {fileID: 8300000, guid: 48b90da101cddae488998772f8d6571f, type: 3}
+  - {fileID: 8300000, guid: 800ca5863c2a9ac4e8814fba0489e9e7, type: 3}
+  - {fileID: 8300000, guid: 6c0be50bcb5a8dd46bd1c2d7ae8f73fc, type: 3}
+  hallucinationObjects: []
+  hallucinationMinInterval: 5
+  hallucinationMaxInterval: 15
+  hallucinationDuration: 1.5
+  thirstWarning60: {fileID: 0}
+  thirstWarning25: {fileID: 0}
+  lowSanityWarning: {fileID: 0}
+  lowtime: {fileID: 0}
+  drinkHint: {fileID: 0}
+  timer: {fileID: 0}
+  waterPercentage: {fileID: 0}
+  sanityPercentage: {fileID: 0}

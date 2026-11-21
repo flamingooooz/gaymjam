@@ -329,6 +329,9 @@ public class GameManager : MonoBehaviour
 
     void timerEnded()
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        Time.timeScale = 0;
         hasEnded = true;
         winMenu.SetActive(true);
     }
