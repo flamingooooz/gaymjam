@@ -6,18 +6,7 @@ public class Winorlosestate : MonoBehaviour
     public GameObject win;
     public GameObject lose;
     public GameObject gameWin;
-    public float elapsed =0;
-    public int show = 222;
-
-    public void Update()
-    {
-        elapsed += Time.deltaTime;
-        if (elapsed >= show)
-        {
-            ShowWin(true);
-        }
-    }
-
+  
     public void ShowWin(bool show)
     { 
         if(show == true)
