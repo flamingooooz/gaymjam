@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -60,10 +59,6 @@ public class GameManager : MonoBehaviour
     private float hallucinationTimer;
     private Vector3 camStartLocalPos;
 
-    [Header("muu UI")]
-    public GameObject drinkHint;
-    public TextMeshProUGUI timer;
-
     public static GameManager instance;
     private void Awake()
     {
@@ -75,7 +70,6 @@ public class GameManager : MonoBehaviour
         if (thirstWarning60 != null) thirstWarning60.SetActive(false);
         if (thirstWarning25 != null) thirstWarning25.SetActive(false);
         if (lowSanityWarning != null) lowSanityWarning.SetActive(false);
-        if (drinkHint != null) drinkHint.SetActive(false);
 
         lowtime.SetActive(false);
         ResetHallucinationTimer();
@@ -113,11 +107,6 @@ public class GameManager : MonoBehaviour
         UpdateSanityEffects();
         CheckWarnings();
 
-        int minutes = Mathf.FloorToInt(time / 60f);
-        int seconds = Mathf.FloorToInt(time - (minutes * 60));
-        float milliseconds = (time - (seconds + (minutes * 60))) * 1000f;
-        string timeStyle = string.Format("{0:0}:{1:00}:{2:000}", minutes, seconds, milliseconds);
-        timer.text = timeStyle;
     }
 
     void LateUpdate()
