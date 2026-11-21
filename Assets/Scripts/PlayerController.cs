@@ -1,7 +1,6 @@
-using Unity.Cinemachine;
+using System.IO.Compression;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Windows;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,13 +8,17 @@ public class PlayerController : MonoBehaviour
     private float runSpeed = 50f;
     private float walkSpeed = 10f;
     private float jumpForce = 150f;
+    private float dashCooldownTime = 1f;
+    private float cooldownTimer;
     private Rigidbody rb;
+    private Vector3 playerScale;
 
     private bool isGrounded;
 
     public InputActionReference move;
     public InputActionReference jump;
     public InputActionReference run;
+    public InputActionReference crouch;
 
     public Transform camera;
 
@@ -24,16 +27,19 @@ public class PlayerController : MonoBehaviour
         move.action.Enable();
         jump.action.Enable();
         run.action.Enable();
+        crouch.action.Enable();
     }
     private void OnDisable()
     {
         move.action.Disable();
         jump.action.Disable();
         run.action.Disable();
+        crouch.action.Disable();
     }
 
     private void Start()
     {
+        playerScale = transform.localScale;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         rb = GetComponent<Rigidbody>();
@@ -41,13 +47,16 @@ public class PlayerController : MonoBehaviour
 
     bool IsGrounded()
     {
-        return (Physics.SphereCast(transform.position, 0.5f, -transform.up, out RaycastHit hit, 0.6f));
+        return Physics.SphereCast(transform.position, 0.5f, -transform.up, out RaycastHit hit, 0.6f);
     }
 
     private void FixedUpdate()
     {
         isGrounded = IsGrounded();
 
+        cooldownTimer += Time.fixedDeltaTime;
+
+        //player rotation
         if (camera != null)
         {
             Vector3 forward = camera.forward;
@@ -58,22 +67,40 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        //movement
         Vector2 moveInput = move.action.ReadValue<Vector2>();
         Vector3 moveDirection = transform.right * moveInput.x + transform.forward * moveInput.y;
 
         Vector3 targetVelocity = moveDirection * speed;
         rb.linearVelocity = new Vector3(targetVelocity.x, rb.linearVelocity.y, targetVelocity.z);
 
+        //jump
         if (jump.action.IsPressed() && isGrounded)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
-        if (run.action.IsPressed() && !isGrounded)
+        //dash
+        if (run.action.IsPressed() && !isGrounded && cooldownTimer >= dashCooldownTime)
         {
             speed = runSpeed;
+            Invoke("ResetTimer", 0.5f);
         }
         else {
             speed = walkSpeed;
         }
+        
+        if (crouch.action.IsPressed())
+        {
+            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y / 3, transform.localScale.z);
+        }
+        else
+        {
+            transform.localScale = playerScale;
+        }
+    }
+
+    private void ResetTimer()
+    {
+        cooldownTimer = 0f;
     }
 }
