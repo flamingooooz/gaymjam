@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     [Header("Jano")]
     public float thirst = 100f;
     public float maxThirst = 100f;
-    public Scrollbar scrollbar;
+    public Image thirstImage;
 
     [Header("Sanity")]
     public float sanity = 100f;
@@ -26,7 +26,6 @@ public class GameManager : MonoBehaviour
 
     [Header("Ajastin")]
     public float time = 300f;
-    public GameObject lowtime;
     public float displayDuration = 3f;
     public GameObject winMenu;
 
@@ -43,6 +42,17 @@ public class GameManager : MonoBehaviour
     public float hallucinationMaxInterval = 15f;
     public float hallucinationDuration = 1.5f;
 
+    [Header("Varoitukset")]
+    public GameObject thirstWarning60;
+    public GameObject thirstWarning25;
+    public GameObject lowSanityWarning;
+    public GameObject lowtime;
+
+    private bool warnedThirst60 = false;
+    private bool warnedThirst25 = false;
+    private bool warnedLowSanity = false;
+
+
     private float sanityDecrease;
     private bool hasWarnedLowTime = false;
     private bool hasEnded = false;
@@ -51,6 +61,10 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        if (thirstWarning60 != null) thirstWarning60.SetActive(false);
+        if (thirstWarning25 != null) thirstWarning25.SetActive(false);
+        if (lowSanityWarning != null) lowSanityWarning.SetActive(false);
+
         lowtime.SetActive(false);
         ResetHallucinationTimer();
 
@@ -65,7 +79,8 @@ public class GameManager : MonoBehaviour
     {
         if (hasEnded) return;
 
-        scrollbar.value = thirst / maxThirst;
+        thirstImage.fillAmount = thirst / maxThirst;
+        thirstImage.color = Color.Lerp(Color.blue, Color.white, thirst / maxThirst);
 
         thirst = Mathf.Max(0f, thirst - Time.deltaTime);
         time = Mathf.Max(0f, time - Time.deltaTime);
@@ -84,6 +99,8 @@ public class GameManager : MonoBehaviour
 
         UpdateSanity();
         UpdateSanityEffects();
+        CheckWarnings();
+
     }
 
     void LateUpdate()
@@ -114,6 +131,54 @@ public class GameManager : MonoBehaviour
             sanityDecrease = GetDrainRate();
             sanity = Mathf.MoveTowards(sanity, minValue, sanityDecrease * Time.deltaTime);
         }
+    }
+
+    void CheckWarnings()
+    {
+        
+        if (thirst < thirstOkLimit && !warnedThirst60)
+        {
+            warnedThirst60 = true;
+            ShowWarning(thirstWarning60);
+        }
+        else if (thirst >= thirstOkLimit)
+        {
+            warnedThirst60 = false;
+        }
+
+     
+        if (thirst < thirstLimit3 && !warnedThirst25)
+        {
+            warnedThirst25 = true;
+            ShowWarning(thirstWarning25);
+        }
+        else if (thirst >= thirstLimit3)
+        {
+            warnedThirst25 = false;
+        }
+
+        if (sanity < lowSanityLimit && !warnedLowSanity)
+        {
+            warnedLowSanity = true;
+            ShowWarning(lowSanityWarning);
+        }
+        else if (sanity > lowSanityLimit + 5f)
+        {
+            warnedLowSanity = false; 
+        }
+    }
+
+    void ShowWarning(GameObject warning)
+    {
+        if (warning == null) return;
+        StartCoroutine(ShowTemporarily(warning, displayDuration));
+    }
+
+    IEnumerator ShowTemporarily(GameObject obj, float duration)
+    {
+        obj.SetActive(true);
+        yield return new WaitForSeconds(duration);
+        obj.SetActive(false);
     }
 
     float GetDrainRate()
@@ -158,8 +223,9 @@ public class GameManager : MonoBehaviour
             ResetHallucinationTimer();
     }
 
-    //Hallusinaatiot
 
+
+    //Hallusinaatiot
     void lowSanity1(float intensity)
     {
         hallucinationTimer -= Time.deltaTime;
