@@ -1,12 +1,13 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
     private float speed;
-    private float runSpeed = 50f;
-    private float walkSpeed = 10f;
-    private float jumpForce = 150f;
+    private float runSpeed = 30f;
+    private float walkSpeed = 7f;
+    private float jumpForce = 100f;
     private float dashCooldownTime = 1f;
     private float cooldownTimer;
     private Rigidbody rb;
@@ -96,8 +97,6 @@ public class PlayerController : MonoBehaviour
                     transform.rotation = Quaternion.LookRotation(forward);
                 }
             }
-        
-
 
         //movement
         Vector2 moveInput = move.action.ReadValue<Vector2>();
@@ -119,8 +118,11 @@ public class PlayerController : MonoBehaviour
                 Invoke("ResetTimer", 0.5f);
             }
             else {
-                speed = walkSpeed;
-                dashParticle.Stop();
+            for (float f = 0f; f <= 1; f += Time.deltaTime)
+            {
+                speed = Mathf.Lerp(speed, walkSpeed, f);
+            }
+            dashParticle.Stop();
             }
 
             if (crouch.action.IsPressed())
