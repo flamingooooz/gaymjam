@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -78,6 +79,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        Time.timeScale = 1;
         if (thirstWarning60 != null) thirstWarning60.SetActive(false);
         if (thirstWarning25 != null) thirstWarning25.SetActive(false);
         if (lowSanityWarning != null) lowSanityWarning.SetActive(false);
@@ -138,6 +140,10 @@ public class GameManager : MonoBehaviour
             {
                 StartCoroutine(HallucinationEffect());
             }
+        }
+        if (thirst <= 0f)
+        {
+            death();
         }
     }
 
@@ -344,5 +350,18 @@ public class GameManager : MonoBehaviour
         {
             pauseMenu.SetActive(true);
         }
+    }
+    public void death()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        Time.timeScale = 0;
+        deathMenu.SetActive(true);
+        
+    }
+    public void Respawn()
+    {
+        
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
