@@ -3,31 +3,6 @@ using UnityEngine.SceneManagement;
 
 public class Winorlosestate : MonoBehaviour
 {
-    public GameObject win;
-    public GameObject lose;
-    public GameObject gameWin;
-  
-    public void ShowWin(bool show)
-    { 
-        if(show == true)
-        {
-            win.SetActive(show);
-        }
-    }
-    public void ShowLose(bool show)
-    {
-        if (show == true)
-        {
-            gameWin.SetActive(show);
-        }
-    }
-    public void ShowGameWin(bool show)
-    {
-        if (show == true)
-        {
-            lose.SetActive(show);
-        }
-    }
     public void NextLevel()
     {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex; 
