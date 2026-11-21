@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
     public float time = 300f;
     public float displayDuration = 3f;
     public GameObject winMenu;
+    public GameObject deathMenu;
+    public GameObject pauseMenu;
 
     [Header("Sanity-efektit")]
     public AudioSource heartbeatSource;    
@@ -307,5 +309,17 @@ public class GameManager : MonoBehaviour
     void Hide()
     {
         lowtime.SetActive(false);
+    }
+   
+    public void pause()
+    {
+        if (pauseMenu.activeSelf == true)
+        {
+            pauseMenu.SetActive(false);
+        }
+        else 
+        {
+            pauseMenu.SetActive(true);
+        }
     }
 }
