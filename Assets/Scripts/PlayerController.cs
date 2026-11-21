@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     private float cooldownTimer;
     private Rigidbody rb;
     private Vector3 playerScale;
+    private float reach = 5f;
 
     private bool isGrounded;
 
@@ -19,6 +20,7 @@ public class PlayerController : MonoBehaviour
     public InputActionReference jump;
     public InputActionReference run;
     public InputActionReference crouch;
+    public InputActionReference drink;
 
     public Transform camera;
 
@@ -28,6 +30,7 @@ public class PlayerController : MonoBehaviour
         jump.action.Enable();
         run.action.Enable();
         crouch.action.Enable();
+        drink.action.Enable();
     }
     private void OnDisable()
     {
@@ -35,6 +38,7 @@ public class PlayerController : MonoBehaviour
         jump.action.Disable();
         run.action.Disable();
         crouch.action.Disable();
+        drink.action.Disable();
     }
 
     private void Start()
@@ -96,6 +100,20 @@ public class PlayerController : MonoBehaviour
         else
         {
             transform.localScale = playerScale;
+        }
+        Debug.DrawRay(transform.position, transform.forward);
+        if (Physics.BoxCast(transform.position, transform.localScale, transform.forward, transform.rotation, reach, LayerMask.GetMask("bottle")))
+        {
+            GameManager.instance.drinkHint.SetActive(true);
+            if(drink.action.IsPressed())
+            {
+                GameManager.instance.Drink(20f);
+                SpawnManager.instance.RespawnBottle();
+            }
+        }
+        else
+        {
+            GameManager.instance.drinkHint.SetActive(false);
         }
     }
 
