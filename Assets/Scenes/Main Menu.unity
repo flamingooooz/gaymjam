@@ -619,6 +619,11 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1375172615 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 998730502201471710, guid: 9d0dc8cee61a39046a39195a34908819, type: 3}
+  m_PrefabInstance: {fileID: 2953550200767570774}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2953550200767570774
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -631,6 +636,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -68
       objectReference: {fileID: 0}
+    - target: {fileID: 1983154482733641186, guid: 9d0dc8cee61a39046a39195a34908819, type: 3}
+      propertyPath: exitGame
+      value: 
+      objectReference: {fileID: 1375172615}
     - target: {fileID: 2481218974377408913, guid: 9d0dc8cee61a39046a39195a34908819, type: 3}
       propertyPath: m_text
       value: 'pelin nimi
