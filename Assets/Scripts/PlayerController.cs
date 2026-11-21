@@ -80,7 +80,7 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(Vector3.up * jumpForce * (GameManager.instance.thirst / 100), ForceMode.Impulse);
         }
         //dash
-        if (run.action.IsPressed() && !isGrounded && cooldownTimer >= dashCooldownTime)
+        if (run.action.IsPressed() && cooldownTimer >= dashCooldownTime)
         {
             speed = runSpeed;
             Invoke("ResetTimer", 0.5f);

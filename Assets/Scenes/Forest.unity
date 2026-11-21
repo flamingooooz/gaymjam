@@ -1344,7 +1344,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   thirst: 100
   maxThirst: 100
-  thirstImage: {fileID: 0}
+  thirstImage: {fileID: 104630378}
   sanity: 100
   minValue: 0
   sanityIncrease: 1
