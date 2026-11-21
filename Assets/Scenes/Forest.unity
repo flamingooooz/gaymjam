@@ -1377,6 +1377,7 @@ MonoBehaviour:
   thirstWarning25: {fileID: 0}
   lowSanityWarning: {fileID: 105884160}
   lowtime: {fileID: 1826074875}
+  drinkHint: {fileID: 0}
 --- !u!4 &1209501512
 Transform:
   m_ObjectHideFlags: 0
