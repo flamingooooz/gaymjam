@@ -391,6 +391,7 @@ public class GameManager : MonoBehaviour
     }
     public void Respawn()
     {
+        Time.timeScale = 1;
         Audiomanager.PlaySound(SoundType.Button);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
