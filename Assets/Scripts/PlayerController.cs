@@ -100,10 +100,19 @@ public class PlayerController : MonoBehaviour
 
         //movement
         Vector2 moveInput = move.action.ReadValue<Vector2>();
+        if (moveInput!= Vector2.zero)
+        {
+            Audiomanager.StartContinuousSound(SoundType.Walk);
+        }
+        else
+        {
+            Audiomanager.StopContinuousSound();
+        }
             Vector3 moveDirection = transform.right * moveInput.x + transform.forward * moveInput.y;
 
             Vector3 targetVelocity = moveDirection * speed * (Mathf.Sqrt(GameManager.instance.thirst) / 10);
             rb.linearVelocity = new Vector3(targetVelocity.x, rb.linearVelocity.y, targetVelocity.z);
+
 
             //jump
             if (jump.action.IsPressed() && isGrounded)
@@ -139,7 +148,8 @@ public class PlayerController : MonoBehaviour
                 GameManager.instance.drinkHint.SetActive(true);
                 if (drink.action.IsPressed())
                 {
-                    GameManager.instance.Drink(15f);
+                Audiomanager.PlaySound(SoundType.Drink);
+                GameManager.instance.Drink(15f);
                     SpawnManager.instance.RespawnBottle();
                 }
             }
