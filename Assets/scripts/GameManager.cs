@@ -386,6 +386,7 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         Time.timeScale = 0;
+        Audiomanager.PlaySound(SoundType.Death_Sound);
         deathMenu.SetActive(true);
         
     }

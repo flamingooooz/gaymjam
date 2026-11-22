@@ -145,53 +145,56 @@ MonoBehaviour:
   soundlist:
   - soundType: 0
     clip: {fileID: 8300000, guid: 6e081ec65d3ffda43a443cc1faff97e0, type: 3}
-    defaultVolume: 0
+    defaultVolume: 1
   - soundType: 1
     clip: {fileID: 8300000, guid: f67a0d6d5ffc32c44be50b9af435c596, type: 3}
-    defaultVolume: 0
+    defaultVolume: 1
   - soundType: 2
     clip: {fileID: 8300000, guid: 2bfaf0ef925e8d540ae80562a557aeb5, type: 3}
-    defaultVolume: 0
+    defaultVolume: 1
   - soundType: 3
     clip: {fileID: 8300000, guid: 70448e4c9b00c0d468f8bc2ca59ef3c6, type: 3}
-    defaultVolume: 0
+    defaultVolume: 1
   - soundType: 4
     clip: {fileID: 8300000, guid: 7a9bfa12e10a46044a54c57f4138399a, type: 3}
-    defaultVolume: 0
+    defaultVolume: 1
   - soundType: 5
     clip: {fileID: 8300000, guid: 63ecb04988bcd05498f76c3cdca6154b, type: 3}
-    defaultVolume: 0
+    defaultVolume: 1
   - soundType: 6
     clip: {fileID: 8300000, guid: 1fdd8d17153c25c48935a987ecbac7fc, type: 3}
-    defaultVolume: 0
+    defaultVolume: 1
   - soundType: 7
     clip: {fileID: 8300000, guid: 48b90da101cddae488998772f8d6571f, type: 3}
-    defaultVolume: 0
+    defaultVolume: 1
   - soundType: 8
     clip: {fileID: 8300000, guid: c52201d6b46b47c42902a22d7b2549e5, type: 3}
-    defaultVolume: 0
+    defaultVolume: 1
   - soundType: 9
     clip: {fileID: 8300000, guid: 2121fea20a1e39249a9f45eea84ee6b7, type: 3}
-    defaultVolume: 0
+    defaultVolume: 1
   - soundType: 10
     clip: {fileID: 8300000, guid: d4098abe523e1364396932347027d5bc, type: 3}
-    defaultVolume: 0
+    defaultVolume: 1
   - soundType: 11
     clip: {fileID: 8300000, guid: 6a8082755f6087049bc5fc2f4a225656, type: 3}
-    defaultVolume: 0
+    defaultVolume: 1
   - soundType: 12
     clip: {fileID: 8300000, guid: 59ddde827fc27a847a87c272a6473d98, type: 3}
-    defaultVolume: 0
+    defaultVolume: 1
   - soundType: 13
     clip: {fileID: 8300000, guid: 0022ccc680dbe0341809d8882fa57894, type: 3}
-    defaultVolume: 0.781
+    defaultVolume: 0.283
   - soundType: 14
     clip: {fileID: 8300000, guid: 9eb79650a4607cb44bde7df36db1f940, type: 3}
-    defaultVolume: 0
+    defaultVolume: 0.494
   musiclist:
   - musicType: 0
     clip: {fileID: 8300000, guid: ff8610a556ca7334ca47843ce835533f, type: 3}
-    defaultVolume: 0
+    defaultVolume: 1
   - musicType: 1
     clip: {fileID: 8300000, guid: 0e12ca38f67bfab4abc08fc352d907d3, type: 3}
-    defaultVolume: 0
+    defaultVolume: 1
+  - musicType: 2
+    clip: {fileID: 8300000, guid: b386f086797cbaa49bab0ae635673ba9, type: 3}
+    defaultVolume: 1

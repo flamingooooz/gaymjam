@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 
@@ -46,6 +47,7 @@ public enum MusicType
 {
     Main_Menu,
     Low_Sanity,
+    Victory,
 }
 [System.Serializable]
 public class SoundEntry
@@ -110,6 +112,32 @@ public class Audiomanager : MonoBehaviour
                 musicDict.Add(entry.musicType, entry);
         }
     }
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    { 
+        StopContinuousSound();
+        if (scene.name == "Main Menu")
+        {
+            PlayMusic(MusicType.Main_Menu);
+        }
+        else if (scene.name == "Forest")
+        {
+            StopMusic();
+            StartContinuousSound(SoundType.Rain);
+        }
+        else
+        {
+            StopContinuousSound();
+        }
+    }
+
     public void Start()
     {
         sfxSource = GetComponent<AudioSource>();
