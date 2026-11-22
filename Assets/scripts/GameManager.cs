@@ -4,7 +4,6 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-using Unity.VisualScripting;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -43,6 +42,8 @@ public class GameManager : MonoBehaviour
     public AudioSource heartbeatSource;
     public VolumeProfile postProcessingVolume;
     private LensDistortion distortion;
+    private ColorAdjustments hue;
+    private Vignette vignette;
 
     [Header("Hallusinaatiot")]
     public AudioSource whisperSource;
@@ -96,10 +97,7 @@ public class GameManager : MonoBehaviour
 
         if (postProcessingVolume != null)
         {
-            if (postProcessingVolume.TryGet(out distortion))
-            {
-                distortion.intensity.value = 0;
-            }
+            StartCoroutine(ResetHallucinationEffects());
         }
     }
 
@@ -134,17 +132,14 @@ public class GameManager : MonoBehaviour
         int seconds = Mathf.FloorToInt(time - (minutes * 60));
         float milliseconds = (time - (seconds + (minutes * 60))) * 1000f;
         string timeStyle = string.Format("{0:0}:{1:00}:{2:000}", minutes, seconds, milliseconds);
-        timer.text = "Time remaining: " + timeStyle;
+        timer.text = "SURVIVE: " + timeStyle;
 
         waterPercentage.text = Mathf.RoundToInt(thirst) + "%";
         sanityPercentage.text = Mathf.RoundToInt(sanity) + "%";
 
-        if (sanity < lowSanityLimit)
+        if (sanity > lowSanityLimit)
         {
-            if (postProcessingVolume != null)
-            {
-                StartCoroutine(HallucinationEffect());
-            }
+            StartCoroutine(ResetHallucinationEffects());
         }
         if (thirst <= 0f || sanity <= 0f)
         {
@@ -227,7 +222,7 @@ public class GameManager : MonoBehaviour
 
     float GetSanityIntensity()
     {
-        return Mathf.Clamp01(1f - sanity / lowSanityLimit);
+        return Mathf.Clamp01(1f - (sanity / lowSanityLimit));
     }
 
     void UpdateSanityEffects()
@@ -264,18 +259,20 @@ public class GameManager : MonoBehaviour
         hallucinationTimer -= Time.deltaTime;
         if (hallucinationTimer > 0f) return;
 
-        TriggerHallucination(intensity);
+        TriggerHallucination();
 
         hallucinationTimer = Random.Range(hallucinationMinInterval, hallucinationMaxInterval)
                              * Mathf.Lerp(1f, 0.4f, intensity);
     }
 
-    void TriggerHallucination(float intensity)
+    void TriggerHallucination()
     {
         if (whisperSource != null && whisperClips.Length > 0)
         {
             whisperSource.PlayOneShot(whisperClips[Random.Range(0, whisperClips.Length)]);
         }
+
+        StartCoroutine(HallucinationEffect());
 
         if (hallucinationObjects.Length > 0)
         {
@@ -285,23 +282,35 @@ public class GameManager : MonoBehaviour
     }
     IEnumerator HallucinationEffect()
     {
-        if (postProcessingVolume.TryGet(out distortion))
+        float intensity = GetSanityIntensity();
+
+        if (postProcessingVolume.TryGet(out distortion) && postProcessingVolume.TryGet(out hue) && postProcessingVolume.TryGet(out vignette))
         {
-            for (float f = 0f; f <= 1; f += Time.deltaTime)
+            for (int i = 0; i < 5; i++)
             {
-                distortion.intensity.value = Mathf.Lerp(0, -1f, f);
-                yield return null;
+                for (float f = 0f; f <= 1; f += Time.deltaTime)
+                {
+                    if (postProcessingVolume != null)
+                    {
+                        distortion.intensity.value = Mathf.Lerp(0f, -intensity, f);
+                        hue.hueShift.value = Mathf.Lerp(0f, intensity * 20, f);
+                        vignette.intensity.value = Mathf.Lerp(0.2f, 0.4f, f);
+                        vignette.color.value = Color.Lerp(Color.black, Color.red, f);
+                        yield return null;
+                    }
+                }
+                for (float f = 0f; f <= 1; f += Time.deltaTime)
+                {
+                    if (postProcessingVolume != null)
+                    {
+                        distortion.intensity.value = Mathf.Lerp(-intensity, 0f, f);
+                        hue.hueShift.value = Mathf.Lerp(intensity * 20, 0f, f);
+                        vignette.intensity.value = Mathf.Lerp(0.4f, 0.2f, f);
+                        vignette.color.value = Color.Lerp(Color.red, Color.black, f);                
+                        yield return null;
+                    }
+                }   
             }
-                for (float f = 0f; f <= 1; f += Time.deltaTime)
-                {
-                    distortion.intensity.value = Mathf.Lerp(-1f, -0.1f, f);
-                    yield return null;
-                }
-                for (float f = 0f; f <= 1; f += Time.deltaTime)
-                {
-                    distortion.intensity.value = Mathf.Lerp(-0.1f, -1f, f);
-                    yield return null;
-                }
         }
     }
     IEnumerator ShowHallucination(GameObject obj)
@@ -309,6 +318,20 @@ public class GameManager : MonoBehaviour
         obj.SetActive(true);
         yield return new WaitForSeconds(hallucinationDuration);
         obj.SetActive(false);
+    }
+    IEnumerator ResetHallucinationEffects()
+    {
+        for (float f = 0f; f <= 1; f += Time.deltaTime)
+        {
+            if (postProcessingVolume.TryGet(out distortion) && postProcessingVolume.TryGet(out hue) && postProcessingVolume.TryGet(out vignette))
+            {
+                distortion.intensity.value = Mathf.Lerp(distortion.intensity.value, 0f, f);  
+                hue.hueShift.value = Mathf.Lerp(hue.hueShift.value, 0f, f);
+                vignette.intensity.value = Mathf.Lerp(vignette.intensity.value, 0.2f, f);
+                vignette.color.value = Color.Lerp(vignette.color.value, Color.black, f);         
+                yield return null;
+            }
+        }
     }
 
     void ResetHallucinationTimer()
@@ -321,6 +344,7 @@ public class GameManager : MonoBehaviour
     public void Drink(float amount)
     {
         thirst = Mathf.Min(maxThirst, thirst + amount);
+        sanity = Mathf.Min(maxSanity, sanity + amount / 3);
     }
 
     // ajastin
