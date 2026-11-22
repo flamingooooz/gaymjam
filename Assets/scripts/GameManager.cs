@@ -119,7 +119,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        if (time < 120f && !hasWarnedLowTime)
+        if (time < 60f && !hasWarnedLowTime)
         {
             hasWarnedLowTime = true;
             timerLow();
@@ -142,7 +142,7 @@ public class GameManager : MonoBehaviour
         {
             StartCoroutine(ResetHallucinationEffects());
         }
-        if (thirst <= 0f || sanity <= 0f)
+        if ((thirst <= 0f || sanity <= 0f) && Time.timeScale == 1)
         {
             death();
         }
