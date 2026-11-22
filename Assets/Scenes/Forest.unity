@@ -383,16 +383,15 @@ PrefabInstance:
       propertyPath: bottle
       value: 
       objectReference: {fileID: 1390164425373446858, guid: beb3a653cdca80243aff3a2a3afcd092, type: 3}
+    - target: {fileID: 2424292182891694215, guid: 8dcd046c297431040812e06bc5f49c08, type: 3}
+      propertyPath: particle
+      value: 
+      objectReference: {fileID: 4013450446364590023, guid: 61adb11fa240ffb46842f8dc445cb404, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8dcd046c297431040812e06bc5f49c08, type: 3}
---- !u!1 &681852367 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5112201870832651794, guid: 217c6df5faace704bb1a227fae7d2450, type: 3}
-  m_PrefabInstance: {fileID: 470524016113657989}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &878089327 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9147526960058671299, guid: 217c6df5faace704bb1a227fae7d2450, type: 3}
@@ -5481,7 +5480,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8634284007851718500, guid: f421a1c9bea2c064fb5f5bb0030d42a7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.7800002
+      value: 1.114286
       objectReference: {fileID: 0}
     - target: {fileID: 8634284007851718500, guid: f421a1c9bea2c064fb5f5bb0030d42a7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5965,6 +5964,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 217c6df5faace704bb1a227fae7d2450, type: 3}
+--- !u!1 &470524016113657990 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4814487023098233783, guid: 217c6df5faace704bb1a227fae7d2450, type: 3}
+  m_PrefabInstance: {fileID: 470524016113657989}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8585106339597901086
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6036,7 +6040,7 @@ PrefabInstance:
     - target: {fileID: 5264393983338238150, guid: 1b5e7f3f792e8b44e868b07fd9e6385b, type: 3}
       propertyPath: pauseMenu
       value: 
-      objectReference: {fileID: 681852367}
+      objectReference: {fileID: 470524016113657990}
     - target: {fileID: 5264393983338238150, guid: 1b5e7f3f792e8b44e868b07fd9e6385b, type: 3}
       propertyPath: sanityImage
       value: 

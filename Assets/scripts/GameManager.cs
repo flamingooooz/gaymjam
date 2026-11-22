@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public float thirst = 100f;
     public float maxThirst = 100f;
     public Image thirstImage;
+    public float thirstSpeed = 2f;
 
     [Header("Sanity")]
     public float sanity = 100f;
@@ -110,7 +111,7 @@ public class GameManager : MonoBehaviour
         thirstImage.fillAmount = thirst / maxThirst;
         thirstImage.color = Color.Lerp(Color.blue, Color.white, thirst / maxThirst);
 
-        thirst = Mathf.Max(0f, thirst - Time.deltaTime);
+        thirst = Mathf.Max(0f, thirst - Time.deltaTime * thirstSpeed);
         time = Mathf.Max(0f, time - Time.deltaTime);
 
         if (time <= 0f)
@@ -145,7 +146,7 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(HallucinationEffect());
             }
         }
-        if (thirst <= 0f)
+        if (thirst <= 0f || sanity <= 0f)
         {
             death();
         }
@@ -288,22 +289,19 @@ public class GameManager : MonoBehaviour
         {
             for (float f = 0f; f <= 1; f += Time.deltaTime)
             {
-                distortion.intensity.value = Mathf.Lerp(0, -0.8f, f);
+                distortion.intensity.value = Mathf.Lerp(0, -1f, f);
                 yield return null;
             }
-            for (int i = 0; i < 5; i++)
-            {
                 for (float f = 0f; f <= 1; f += Time.deltaTime)
                 {
-                    distortion.intensity.value = Mathf.Lerp(-0.8f, 0.8f, f);
+                    distortion.intensity.value = Mathf.Lerp(-1f, -0.1f, f);
                     yield return null;
                 }
                 for (float f = 0f; f <= 1; f += Time.deltaTime)
                 {
-                    distortion.intensity.value = Mathf.Lerp(0.8f, -0.8f, f);
+                    distortion.intensity.value = Mathf.Lerp(-0.1f, -1f, f);
                     yield return null;
                 }
-            }
         }
     }
     IEnumerator ShowHallucination(GameObject obj)

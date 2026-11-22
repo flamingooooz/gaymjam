@@ -47,15 +47,16 @@ MonoBehaviour:
   thirst: 100
   maxThirst: 100
   thirstImage: {fileID: 0}
+  thirstSpeed: 1.2
   sanity: 100
   maxSanity: 100
   minValue: 0
   sanityIncrease: 1
-  thirstOkLimit: 60
-  lowSanityLimit: 50
+  thirstOkLimit: 70
+  lowSanityLimit: 60
   sanityImage: {fileID: 0}
-  thirstLimit2: 40
-  thirstLimit3: 25
+  thirstLimit2: 50
+  thirstLimit3: 30
   drainMild: 0.2
   drainMedium: 1
   drainHigh: 2
