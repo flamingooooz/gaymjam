@@ -10255,11 +10255,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2481218974377408913, guid: 9d0dc8cee61a39046a39195a34908819, type: 3}
       propertyPath: m_text
-      value: THE GAME
+      value: THE DROUGHT
       objectReference: {fileID: 0}
     - target: {fileID: 2481218974377408913, guid: 9d0dc8cee61a39046a39195a34908819, type: 3}
       propertyPath: m_fontSize
-      value: 194.85
+      value: 170.5
       objectReference: {fileID: 0}
     - target: {fileID: 2481218974377408913, guid: 9d0dc8cee61a39046a39195a34908819, type: 3}
       propertyPath: m_fontAsset
