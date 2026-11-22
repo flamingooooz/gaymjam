@@ -12,9 +12,9 @@ public class Mainmenu : MonoBehaviour
     }
     public void OnExitClicked() 
     {
+        Audiomanager.PlaySound(SoundType.Button);
         Application.Quit();
         Debug.Log("I AM EXCITING CHILLL!!!");
-        Audiomanager.PlaySound(SoundType.Button);
     }
 
 }
