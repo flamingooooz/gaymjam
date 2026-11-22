@@ -273,6 +273,8 @@ public class GameManager : MonoBehaviour
             whisperSource.PlayOneShot(whisperClips[Random.Range(0, whisperClips.Length)]);
         }
 
+        Audiomanager.PlayMusic(MusicType.Low_Sanity);
+
         StartCoroutine(HallucinationEffect());
 
         if (hallucinationObjects.Length > 0)
