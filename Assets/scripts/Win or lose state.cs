@@ -19,15 +19,18 @@ public class Winorlosestate : MonoBehaviour
     }
     public void RestartLevel()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         Debug.Log("REload");
     }
     public void LoadMenu()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene("Main Menu");
     }
     public void FirstLevel()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene("forest");
     }
 }
