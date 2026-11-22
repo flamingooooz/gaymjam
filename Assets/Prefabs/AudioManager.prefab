@@ -184,7 +184,7 @@ MonoBehaviour:
     defaultVolume: 1
   - soundType: 13
     clip: {fileID: 8300000, guid: 0022ccc680dbe0341809d8882fa57894, type: 3}
-    defaultVolume: 0.283
+    defaultVolume: 0.103
   - soundType: 14
     clip: {fileID: 8300000, guid: 9eb79650a4607cb44bde7df36db1f940, type: 3}
     defaultVolume: 0.494

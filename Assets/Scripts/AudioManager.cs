@@ -211,7 +211,11 @@ public class Audiomanager : MonoBehaviour
     {
         if (instance != null && instance.musicSource.isPlaying)
         {
+            instance.sfxSource.Stop();
+            instance.loopingSource.Stop();
             instance.musicSource.Stop();
+            instance.loopingSource.clip = null;
+            instance.sfxSource.clip = null;
             instance.musicSource.clip = null;
         }
     }

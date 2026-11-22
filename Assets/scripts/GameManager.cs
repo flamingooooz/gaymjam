@@ -359,6 +359,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0;
         hasEnded = true;
         winMenu.SetActive(true);
+        Audiomanager.StopMusic();
     }
 
     void timerLow()
@@ -388,6 +389,7 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         Time.timeScale = 0;
+        Audiomanager.StopMusic();
         Audiomanager.PlaySound(SoundType.Death_Sound);
         deathMenu.SetActive(true);
         

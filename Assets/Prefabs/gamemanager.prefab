@@ -52,13 +52,13 @@ MonoBehaviour:
   maxSanity: 100
   minValue: 0
   sanityIncrease: 1
-  thirstOkLimit: 80
-  lowSanityLimit: 75
+  thirstOkLimit: 75
+  lowSanityLimit: 70
   sanityImage: {fileID: 0}
-  thirstLimit2: 60
-  thirstLimit3: 30
+  thirstLimit2: 50
+  thirstLimit3: 25
   drainMild: 1
-  drainMedium: 2
+  drainMedium: 1.5
   drainHigh: 1
   drainCritical: 0.5
   time: 180

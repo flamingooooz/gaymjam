@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private Vector3 playerScale;
     private float reach = 5f;
-    
+    public float thirst = 10f;
 
     private bool isGrounded;
 
@@ -157,7 +157,7 @@ public class PlayerController : MonoBehaviour
                 if (drink.action.IsPressed())
                 {
                 Audiomanager.PlaySound(SoundType.Drink);
-                GameManager.instance.Drink(15f);
+                GameManager.instance.Drink(thirst);
                     SpawnManager.instance.RespawnBottle();
                 }
             }

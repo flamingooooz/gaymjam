@@ -9871,23 +9871,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6c79c77d2da01b143a9c715a31a50562, type: 3}
---- !u!1 &1718361669 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7640428226698684853, guid: 217c6df5faace704bb1a227fae7d2450, type: 3}
-  m_PrefabInstance: {fileID: 1805369074}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1718361675
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1718361669}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 456d544c3c08c384da405936deb547eb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Winorlosestate
 --- !u!1001 &1734522188
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10207,7 +10190,7 @@ PrefabInstance:
     - target: {fileID: 3243857174235274413, guid: 217c6df5faace704bb1a227fae7d2450, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1718361675}
+      objectReference: {fileID: 0}
     - target: {fileID: 3243857174235274413, guid: 217c6df5faace704bb1a227fae7d2450, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: LoadMenu
@@ -10233,15 +10216,13 @@ PrefabInstance:
       value: Respawn
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 7640428226698684853, guid: 217c6df5faace704bb1a227fae7d2450, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2657361198817323383, guid: 217c6df5faace704bb1a227fae7d2450, type: 3}
       insertIndex: 14
       addedObject: {fileID: 2032399178}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7640428226698684853, guid: 217c6df5faace704bb1a227fae7d2450, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1718361675}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 217c6df5faace704bb1a227fae7d2450, type: 3}
 --- !u!114 &1805369075 stripped
 MonoBehaviour:
