@@ -61,11 +61,12 @@ MonoBehaviour:
   drainMedium: 2
   drainHigh: 1
   drainCritical: 0.5
-  time: 300
+  time: 180
   displayDuration: 3
   winMenu: {fileID: 0}
   deathMenu: {fileID: 0}
   pauseMenu: {fileID: 0}
+  dashNote: {fileID: 0}
   heartbeatSource: {fileID: 0}
   postProcessingVolume: {fileID: 11400000, guid: 7d788c3cfac26ae45aa18b6204ccb4f3, type: 2}
   whisperSource: {fileID: 0}
