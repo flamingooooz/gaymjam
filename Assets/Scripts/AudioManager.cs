@@ -1,8 +1,8 @@
-using NUnit.Framework.Internal;
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+
 
 
 /* 
@@ -47,18 +47,34 @@ public enum MusicType
     Main_Menu,
     Low_Sanity,
 }
+[System.Serializable]
+public class SoundEntry
+{
+    public SoundType soundType;
+    public AudioClip clip;
+    [Range(0f, 1f)] public float defaultVolume = 1f;
+}
+
+[System.Serializable]
+public class MusicEntry
+{
+    public MusicType musicType;
+    public AudioClip clip;
+    [Range(0f, 1f)] public float defaultVolume = 0.5f;
+}
 [RequireComponent(typeof(AudioSource))]
 public class Audiomanager : MonoBehaviour
 {
-    [SerializeField] private AudioClip[] soundlist;
-    [SerializeField] private AudioClip[] musiclist;
+    [SerializeField] private SoundEntry[] soundlist;
+    [SerializeField] private MusicEntry[] musiclist;
     private static Audiomanager instance;
     private AudioSource sfxSource;
     private AudioSource loopingSource;
     private AudioSource musicSource;
 
 
-
+    private Dictionary<SoundType, SoundEntry> soundDict;
+    private Dictionary<MusicType, MusicEntry> musicDict;
 
     private void Awake()
     {
@@ -69,13 +85,31 @@ public class Audiomanager : MonoBehaviour
         }
         instance = this;
         DontDestroyOnLoad(gameObject);
-        sfxSource = gameObject.AddComponent<AudioSource>();
+        sfxSource = GetComponent<AudioSource>();
         loopingSource = gameObject.AddComponent<AudioSource>();
-
+        musicSource = gameObject.AddComponent<AudioSource>();
         loopingSource.loop = true;
+        musicSource.loop = true;
+
+        InitializeDictionaries();
     }
 
+    private void InitializeDictionaries()
+    {
+        soundDict = new Dictionary<SoundType, SoundEntry>();
+        foreach (var entry in soundlist)
+        {
+            if (!soundDict.ContainsKey(entry.soundType))
+                soundDict.Add(entry.soundType, entry);
+        }
 
+        musicDict = new Dictionary<MusicType, MusicEntry>();
+        foreach (var entry in musiclist)
+        {
+            if (!musicDict.ContainsKey(entry.musicType))
+                musicDict.Add(entry.musicType, entry);
+        }
+    }
     public void Start()
     {
         sfxSource = GetComponent<AudioSource>();
@@ -90,30 +124,33 @@ public class Audiomanager : MonoBehaviour
             Audiomanager.PlaySound(SoundType.Wind);
         }
     }
-   
-    public static void PlaySound(SoundType sound, float volume = 1f)
+    public static void PlaySound(SoundType sound, float volumeScale = 1f)
     {
-        int index = (int)sound;
-        if (index >= 0 && index < instance.soundlist.Length)
-        {
-            instance.sfxSource.PlayOneShot(instance.soundlist[index], volume);
-        }
+        if (instance == null || !instance.soundDict.TryGetValue(sound, out SoundEntry entry) || entry.clip == null)
+            return;
+
+        float finalVolume = entry.defaultVolume * volumeScale;
+        instance.sfxSource.PlayOneShot(entry.clip, finalVolume);
     }
-    public static void StartContinuousSound(SoundType sound, float volume = 1f)
+
+    public static void StartContinuousSound(SoundType sound, float volumeScale = 1f)
     {
-        int index = (int)sound;
-        if (index >= 0 && index < instance.soundlist.Length)
+        if (instance == null || !instance.soundDict.TryGetValue(sound, out SoundEntry entry) || entry.clip == null)
+            return;
+
+        float finalVolume = entry.defaultVolume * volumeScale;
+
+        if (instance.loopingSource.isPlaying && instance.loopingSource.clip == entry.clip)
         {
-            AudioClip clipToPlay = instance.soundlist[index];
-            if (instance.loopingSource.isPlaying && instance.loopingSource.clip == clipToPlay)
-            {
-                return;
-            }
-            instance.loopingSource.clip = instance.soundlist[index];
-            instance.loopingSource.volume = volume;
-            instance.loopingSource.Play();
+            instance.loopingSource.volume = finalVolume;
+            return;
         }
+
+        instance.loopingSource.clip = entry.clip;
+        instance.loopingSource.volume = finalVolume;
+        instance.loopingSource.Play();
     }
+
     public static void StopContinuousSound()
     {
         if (instance != null && instance.loopingSource.isPlaying)
@@ -122,27 +159,24 @@ public class Audiomanager : MonoBehaviour
             instance.loopingSource.clip = null;
         }
     }
-    public static void PlayMusic(MusicType music, float volume = 1f, bool loop = true)
+
+    public static void PlayMusic(MusicType music, float volumeScale = 1f, bool loop = true)
     {
-        if (instance == null) return;
+        if (instance == null || !instance.musicDict.TryGetValue(music, out MusicEntry entry) || entry.clip == null)
+            return;
 
-        int index = (int)music;
-        if (index >= 0 && index < instance.musiclist.Length)
+        float finalVolume = entry.defaultVolume * volumeScale;
+
+        if (instance.musicSource.isPlaying && instance.musicSource.clip == entry.clip)
         {
-            AudioClip clipToPlay = instance.musiclist[index];
-
-            // Prevent restarting the track if it is already playing
-            if (instance.musicSource.isPlaying && instance.musicSource.clip == clipToPlay)
-            {
-                instance.musicSource.volume = volume;
-                return;
-            }
-
-            instance.musicSource.clip = clipToPlay;
-            instance.musicSource.volume = volume;
-            instance.musicSource.loop = loop;
-            instance.musicSource.Play();
+            instance.musicSource.volume = finalVolume;
+            return;
         }
+
+        instance.musicSource.clip = entry.clip;
+        instance.musicSource.volume = finalVolume;
+        instance.musicSource.loop = loop;
+        instance.musicSource.Play();
     }
 
     public static void StopMusic()
