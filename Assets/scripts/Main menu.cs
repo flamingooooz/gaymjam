@@ -7,12 +7,14 @@ public class Mainmenu : MonoBehaviour
     public GameObject exitGame;
    public void OnStartClicked()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1); 
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        Audiomanager.PlaySound(SoundType.Button);
     }
     public void OnExitClicked() 
     {
         Application.Quit();
         Debug.Log("I AM EXCITING CHILLL!!!");
+        Audiomanager.PlaySound(SoundType.Button);
     }
 
 }

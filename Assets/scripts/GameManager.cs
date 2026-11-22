@@ -390,7 +390,7 @@ public class GameManager : MonoBehaviour
     }
     public void Respawn()
     {
-        
+        Audiomanager.PlaySound(SoundType.Button);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

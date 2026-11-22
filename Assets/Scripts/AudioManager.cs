@@ -2,6 +2,7 @@ using NUnit.Framework.Internal;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 /* 
@@ -89,7 +90,7 @@ public class Audiomanager : MonoBehaviour
             Audiomanager.PlaySound(SoundType.Wind);
         }
     }
-
+   
     public static void PlaySound(SoundType sound, float volume = 1f)
     {
         int index = (int)sound;
