@@ -25,8 +25,8 @@ Transform:
   m_GameObject: {fileID: 7047066434087925679}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5.58935, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7589225271582665723}
@@ -46,27 +46,27 @@ PrefabInstance:
       objectReference: {fileID: 13400000, guid: 2fb186565337d1b42a4b7addbc2696b7, type: 2}
     - target: {fileID: 4714156280892059371, guid: b1395c251aa19354e9fd36146c6bbeed, type: 3}
       propertyPath: m_LocalScale.x
-      value: 200
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 4714156280892059371, guid: b1395c251aa19354e9fd36146c6bbeed, type: 3}
       propertyPath: m_LocalScale.y
-      value: 200
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 4714156280892059371, guid: b1395c251aa19354e9fd36146c6bbeed, type: 3}
       propertyPath: m_LocalScale.z
-      value: 200
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 4714156280892059371, guid: b1395c251aa19354e9fd36146c6bbeed, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.0041503906
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4714156280892059371, guid: b1395c251aa19354e9fd36146c6bbeed, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.18935013
+      value: 9.1
       objectReference: {fileID: 0}
     - target: {fileID: 4714156280892059371, guid: b1395c251aa19354e9fd36146c6bbeed, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.19802856
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4714156280892059371, guid: b1395c251aa19354e9fd36146c6bbeed, type: 3}
       propertyPath: m_LocalRotation.w
@@ -109,7 +109,7 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 8913269563553822675, guid: b1395c251aa19354e9fd36146c6bbeed, type: 3}
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:

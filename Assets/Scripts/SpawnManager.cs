@@ -20,6 +20,7 @@ public class SpawnManager : MonoBehaviour
 
     public void RespawnBottle()
     {
+        Debug.Log(activeBottle.transform.position);
         Instantiate(particle, activeBottle.transform.position, Quaternion.identity);
         activeBottle.transform.position = SelectSpawn();
     }
@@ -29,7 +30,7 @@ public class SpawnManager : MonoBehaviour
         float x = Random.Range(-radius, radius);
         float z = Random.Range(-radius, radius);
 
-        Vector3 spawnPosition = transform.position + new Vector3(x, 10, z);
+        Vector3 spawnPosition = transform.position + new Vector3(x, 0, z);
         return spawnPosition;
     }
 }
