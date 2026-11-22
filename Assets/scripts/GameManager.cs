@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     public GameObject winMenu;
     public GameObject deathMenu;
     public GameObject pauseMenu;
+    public GameObject dashNote;
 
     [Header("Sanity-efektit")]
     public AudioSource heartbeatSource;

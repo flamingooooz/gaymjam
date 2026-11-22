@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private Vector3 playerScale;
     private float reach = 5f;
+    
 
     private bool isGrounded;
 
@@ -38,8 +39,15 @@ public class PlayerController : MonoBehaviour
     }
     public void Update()
     {
-        //Pausing
-        if (pause.action.WasPressedThisFrame() && isPaused == false)
+        if (cooldownTimer >= dashCooldownTime) 
+        {
+            GameManager.instance.dashNote.SetActive(true);
+        }
+        else {
+            GameManager.instance.dashNote.SetActive(false);
+        }
+            //Pausing
+            if (pause.action.WasPressedThisFrame() && isPaused == false)
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
